@@ -18,7 +18,7 @@
             <div class='navbar'>
                 <a href="{{url_for('index')}}"><div class="nav-elt">Home</div></a>
                 <a href="{{url_for('menu')}}"><div class="nav-elt" style="border-bottom: 2px solid orange;">Menu</div></a>
-                <a href="#"><div class="nav-elt">A propos</div></a>
+                <a href="#footer"><div class="nav-elt">A propos</div></a>
             </div>
             <a href="#" class="panier-comamnde"><i class="fa-solid fa-cart-shopping"></i></a>
             <a href="#"><div class="btn-login">S'enregistrer</div></a>
@@ -56,7 +56,7 @@
             <div class="menu">
                 <a href="{{url_for('index')}}"><div class="nav-elt">Home</div></a>
                 <a href="{{url_for('menu', type='Fast Food')}}"><div class="nav-elt" style="border-bottom: 2px solid white;">Menu</div></a>
-                <a href="#"><div class="nav-elt">A propos</div></a>
+                <a href="#footer"><div class="nav-elt">A propos</div></a>
                 <a href="#"><div class="btn-login2">S'enregistrer</div></a>
             </div>
 
@@ -109,7 +109,7 @@
         <div class="espace"></div>
         <div class="espace"></div>
 
-        <div class='footer hidden my'>
+        <div class='footer hidden my' id="footer">
             <div class="info">
                 <div>
                     <h2>Nos Services</h2>
@@ -156,6 +156,25 @@
             
                 window.addEventListener('scroll', checkVisibility);
                 checkVisibility(); // Initial check in case elements are already in view
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const checkbox = document.getElementById('checkbox2');
+                const menu = document.querySelector('.menu');
+            
+                checkbox.addEventListener('change', function() {
+                    if (checkbox.checked) {
+                        menu.style.display = 'flex';
+                        setTimeout(() => {
+                            menu.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        menu.style.transform = 'translateY(-100%)';
+                        setTimeout(() => {
+                            menu.style.display = 'none';
+                        }, 500);
+                    }
+                });
             });
             </script>
         
