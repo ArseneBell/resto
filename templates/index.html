@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>La cuisine de LETICIA</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}"> 
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    <body>
+        <div class='header'>
+            <span class="nom-resto">La Cuisine de <span class="leticia">LETICIA <i class="fas fa-utensils"></i> </span></span>
+            <div class='navbar'>
+                <a href="{{url_for('index')}}"><div class="nav-elt" style="border-bottom: 2px solid orange;">Home</div></a>
+                <a href="{{url_for('menu')}}"><div class="nav-elt">Menu</div></a>
+                <a href="#"><div class="nav-elt">A propos</div></a>
+            </div>
+            <a href="#" class="panier-comamnde"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="#"><div class="btn-login">S'enregistrer</div></a>
+
+            <div class="check">
+                <input id="checkbox2" type="checkbox">
+                <label class="toggle toggle2" for="checkbox2">
+                <div id="bar4" class="bars"></div>
+                <div id="bar5" class="bars"></div>
+                <div id="bar6" class="bars"></div>
+            </div>
+            
+
+</label>
+        </div>
+
+        <div class='body'>
+
+            <div class="menu">
+                <a href="{{url_for('index')}}"><div class="nav-elt" style="border-bottom: 2px solid white;">Home</div></a>
+                <a href="{{url_for('menu', type='Fast Food')}}"><div class="nav-elt">Menu</div></a>
+                <a href="#"><div class="nav-elt">A propos</div></a>
+                <a href="#"><div class="btn-login2">S'enregistrer</div></a>
+            </div>
+
+            <div class="entete">
+                <div class="slogan-presentation">
+                    <div class="slogan">De la soleil attitude dans vos plats</div>
+                    <div class="presentation">Venez decouvrir notre cuisine et laissez vous emporter par les saveurs que nous proposons</div>
+                </div>
+                <div class="logo">
+                    <!--<span>Restaurant - Glacier - Pizzeria</span>-->
+                    <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="logo">
+                    
+                </div>
+            </div>
+
+            <div class="repas-populaires">
+                <div class="titre">Repas Populaires de la Semaine</div>
+                <div class="caroussel">
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="{{ url_for('static', filename='img/cards/repas1.jpg') }}" alt="repas1">
+                        </div>
+                        <div class="card-info">
+                            <div class="card-titre">Repas 1</div>
+                            <div class="prix">3500fcfa</div>
+                        </div>
+                    </div>
+    
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="{{ url_for('static', filename='img/cards/repas2.jpg') }}" alt="repas1">
+                        </div>
+                        <div class="card-info">
+                            <div class="card-titre">Repas 1</div>
+                            <div class="prix">3500fcfa</div>
+                        </div>
+                    </div>
+    
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="{{ url_for('static', filename='img/cards/repas3.jpg') }}" alt="repas1">
+                        </div>
+                        <div class="card-info">
+                            <div class="card-titre">Repas 1</div>
+                            <div class="prix">3500fcfa</div>
+                        </div>
+                    </div>
+    
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="{{ url_for('static', filename='img/cards/repas4.jpg') }}" alt="repas1">
+                        </div>
+                        <div class="card-info">
+                            <div class="card-titre">Repas 1</div>
+                            <div class="prix">3500fcfa</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="{{ url_for('static', filename='img/cards/repas3.jpg') }}" alt="repas1">
+                        </div>
+                        <div class="card-info">
+                            <div class="card-titre">Repas 1</div>
+                            <div class="prix">3500fcfa</div>
+                        </div>
+                    </div>
+    
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="{{ url_for('static', filename='img/cards/repas4.jpg') }}" alt="repas1">
+                        </div>
+                        <div class="card-info">
+                            <div class="card-titre">Repas 1</div>
+                            <div class="prix">3500fcfa</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="{{ url_for('static', filename='img/cards/repas3.jpg') }}" alt="repas1">
+                        </div>
+                        <div class="card-info">
+                            <div class="card-titre">Repas 1</div>
+                            <div class="prix">3500fcfa</div>
+                        </div>
+                    </div>
+    
+                    <div class="card">
+                        <div class="card-img">
+                            <img src="{{ url_for('static', filename='img/cards/repas4.jpg') }}" alt="repas1">
+                        </div>
+                        <div class="card-info">
+                            <div class="card-titre">Repas 1</div>
+                            <div class="prix">3500fcfa</div>
+                        </div>
+                    </div>
+    
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="deco deco1">
+            <img class="deco-img" src="{{ url_for('static', filename='img/deco/deco2.jpg') }}" alt="">
+        </div>
+        <div class="deco deco2">
+            <img class="deco-img" src="{{ url_for('static', filename='img/deco/deco3.jpg') }}" alt="">
+        </div>
+        <div class="deco deco3">
+            <img class="deco-img" src="{{ url_for('static', filename='img/deco/deco4.jpg') }}" alt="">
+        </div>
+        <div class="deco deco4">
+            <img class="deco-img" src="{{ url_for('static', filename='img/deco/deco5.jpg') }}" alt="">
+        </div>
+        <div class="deco deco5">
+            <img class="deco-img" src="{{ url_for('static', filename='img/deco/deco6.jpg') }}" alt="">
+        </div>
+
+        <div class='footer hidden'>
+            <div class="info">
+                <div>
+                    <h2>Nos Services</h2>
+                    <ul>
+                        <li>Livraison a domicile</li>
+                        <li>Service traiteur</li>
+                        <li>Location de couvert</li>
+                        <li>Cube bouillon 100% naurel Leticube</li>
+                        <li>Gateaux d'anniversaire</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Localisation</h2>
+                    <ul>
+                        <li>Yaounde-Cameroun</li>
+                        <li>Prison Konengui</li>
+                        <li>Face ancienne brigade</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2>Contact</h2>
+                    <ul>
+                        <li><i class="fa fa-phone"></i> 691 005 801 - 692892 242 - 651 195 677</li>
+                        <li><i class="fas fa-envelope"></i> lacuisinedeleticia@gmail.com</li>
+                        <li><i class="fab fa-facebook"> <a href="https://www.facebook.com/share/194XwutfqS" style="color: white;"> La cuisine de LETICIA</a></i></li>
+
+            </div>
+            <div class="commentaire"></div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const elements = document.querySelectorAll('.hidden');
+            
+                function checkVisibility() {
+                    elements.forEach(element => {
+                        const rect = element.getBoundingClientRect();
+                        if (rect.top < window.innerHeight && rect.bottom > 0) {
+                            element.classList.add('visible');
+                        }
+                    });
+                }
+            
+                window.addEventListener('scroll', checkVisibility);
+                checkVisibility(); // Initial check in case elements are already in view
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const checkbox = document.getElementById('checkbox2');
+                const menu = document.querySelector('.menu');
+            
+                checkbox.addEventListener('change', function() {
+                    if (checkbox.checked) {
+                        menu.style.display = 'flex';
+                        setTimeout(() => {
+                            menu.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        menu.style.transform = 'translateY(-100%)';
+                        setTimeout(() => {
+                            menu.style.display = 'none';
+                        }, 500);
+                    }
+                });
+            });
+            </script>
+        
+    </body>
+</html>
