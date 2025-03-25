@@ -443,7 +443,6 @@ body {
     width: 100%;
     height: 100%;
     border-radius: 10px;
-    transition: all 0.5s ease;
 }
 
 .repas-nom{
@@ -457,12 +456,14 @@ body {
     text-align: center;
 }
 .repas-prix{
+    position: absolute;
     font-size: 20px;
     font-weight: bolder;
     color: green;
-    transform: translateY(35px);
+    transform: translateY(15px);
 }
 .panier{
+    position: absolute;
     font-size: 20px;
     color: green;
     transform: translate(400px, 20px);
@@ -564,13 +565,50 @@ body {
     }
     .titre-menu{
         margin-left: 10px;
+        margin-top: 200px;
     }
-    
+    .sidebar{
+        top: 100px;
+    }
     .sidebar ul{
         width: 90%;
         font-size: 15px;
         gap: 30px;
         margin-left: -25px;
     }
-
+    .cards{
+        margin-left: 0;
+        gap: 10px;
+    }
+    .card-repas{
+        width: 200px;
+        height: 280px;
+        padding: 5px;
+    }
+    .card-repas:hover{
+        transform: scale(1);
+    }
+    .repas-img{
+        width: 100%;
+        height: 160px;
+        background-color: orange;
+        border-radius: 10px;
+    }
+    .repas-nom{
+        font-size: 15px;
+    }
+    .repas-prix{
+        font-size: 15px;
+        font-weight: bolder;
+        color: green;
+        transform: translateY(5px);
+    }
+    .panier{
+        font-size: 15px;
+        color: green;
+        transform: translate(180px, 5px);
+    }
+    .my{
+        margin-top: 0;
+    }
   }
