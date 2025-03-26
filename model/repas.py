@@ -36,6 +36,14 @@ class Repas(Base):
             return False
         return result
     
+    def Get_repas_by_id(self, id):
+        session = self.Session()
+        result = session.query(Repas).filter(Repas.id== id).first()
+
+        if result == None:
+            return False
+        return result
+    
     def Get_all_type(self):
         session = self.Session()
         result = session.query(Repas.type).group_by(Repas.type).all()

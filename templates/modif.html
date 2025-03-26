@@ -3,22 +3,22 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Menu</title>
+        <title>{{repas.name}}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}"> 
         <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     </head>
     <body>
         <div class='header'>
             <div id="backButton" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i></div>
             <span class="nom-resto">La Cuisine de <span class="leticia">LETICIA <i class="fas fa-utensils"></i> </span></span>
             <div class='navbar'>
-                <a href="{{url_for('index')}}"><div class="nav-elt">Home</div></a>
-                <a href="{{url_for('menu')}}"><div class="nav-elt" style="border-bottom: 2px solid orange;">Menu</div></a>
+                <a href="{{url_for('index')}}"><div class="nav-elt" style="border-bottom: 2px solid orange;">Home</div></a>
+                <a href="{{url_for('menu', type='Fast Food')}}"><div class="nav-elt">Menu</div></a>
                 <a href="#footer"><div class="nav-elt">A propos</div></a>
             </div>
             <a href="#" class="panier-comamnde"><i class="fa-solid fa-cart-shopping"></i></a>
@@ -31,67 +31,41 @@
                 <div id="bar5" class="bars"></div>
                 <div id="bar6" class="bars"></div>
             </div>
-
-
-        </div>
-
-        <div class="sidebar">
-                
-
-            <ul>
-                {% for tpe in all_types %}
-                    {% if tpe == type %}
-                        <li style="background-color: orange;"><a href="{{url_for('menu', type=tpe)}}">{{ tpe }}</a></li>
-                    {% else %}
-                        <li><a href="{{url_for('menu', type=tpe)}}">{{ tpe }}</a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
-
-                
-        </div>
-
-        <div class='body body-menu'>
             
 
-            <div class="menu">
-                <a href="{{url_for('index')}}"><div class="nav-elt">Home</div></a>
-                <a href="{{url_for('menu', type='Fast Food')}}"><div class="nav-elt" style="border-bottom: 2px solid white;">Menu</div></a>
-                <a href="#footer"><div class="nav-elt">A propos</div></a>
-                <a href="#"><div class="btn-login2">S'enregistrer</div></a>
-            </div>
+</label>
+        </div>
 
-            {% if type %}
-                <h1 class="titre-menu">Menu des {{type}}</h1>
-            {% else %}
-                <h1 class="titre-menu">Menu des Fast Foods</h1>
-            {% endif %}
-
-
-
-            <div class="cards">
-                {% for repa in repas %}
-                <a href="{{url_for('modif', id = repa.id)}}">
-                <div class="card-repas">
-                    <div class="repas-img">
-                        <img src="/static/img/repas/{{repa.photo}}" alt="">
-                    </div>
-                    <div class="repas-info">
-                        <p class="repas-nom">{{ repa.name }}</p>
-                        {% if repa.description%}
-                            <p>{{ repa.description }}</p>
-                            {% endif %}
-                        <div class="repas-prix">{{ repa.prix }} FCFA</div>
-                        <div class="panier"><i class="fa-solid fa-cart-shopping"></i></div>
-                    </div>
-
+        <div class='body'>
+            <div class="container-repas">
+                <div class="img-repas">
+                    <img src="/static/img/repas/{{repas.photo}}" alt="">
                 </div>
-                </a>
-                
-            {% endfor %}
-            </div>
 
-            
+                <!--<div class="info-repas">
+                    <div class="info-name">{{ repas.name }}</div>
+                    <div class="info-type">{{ repas.type }}</div>
+                    <div class="info-prix">Prix : {{ repas.prix }} FCFA</div>
+                    <div class="btn-commander">Commander</div>
+                </div>-->
+
+                <div class="info-repas">
+                    <div class="ligne">
+                        <div>Nom : <input id="repas-name" class="info- info-name" value="{{ repas.name }}"></div>
+                        <div><input id="repas-id" class="info- info-name" value="{{ repas.id }}" hidden></div>
+                    </div>
+                    <div class="ligne">
+                        <div>Type : <input id="repas-type" class="info- info-type" value="{{ repas.type }}"></div>
+                    </div>
+                    <div class="ligne">
+                        <div>Prix : <input id="repas-prix" class="info- info-prix" value="{{ repas.prix }}"></div>
+                    </div>
+                    <div class="btn-">
+                        <button class="btn-commander">Commander</button>
+                        <button id="update-button" class="btn-commander">Modifier</button>
+                    </div>
+                </div>
+            </div>            
         </div>
 
         <div class="deco deco1">
@@ -110,10 +84,7 @@
             <img class="deco-img" src="{{ url_for('static', filename='img/deco/deco6.jpg') }}" alt="">
         </div>
 
-        <div class="espace"></div>
-        <div class="espace"></div>
-
-        <div class='footer hidden my' id="footer">
+        <div class='footer hidden' id="footer">
             <div class="info">
                 <div>
                     <h2>Nos Services</h2>
@@ -180,10 +151,44 @@
                     }
                 });
             });
-
             function goBack() {
                 window.history.back(); // Revient à la page précédente
             }
+
+            document.getElementById('update-button').addEventListener('click', function(event) {
+                event.preventDefault(); // Empêche le rechargement de la page
+        
+                // Récupère les valeurs des champs d'entrée
+                const name = document.getElementById('repas-name').value;
+                const type = document.getElementById('repas-type').value;
+                const prix = document.getElementById('repas-prix').value;
+                const id   = document.getElementById('repas-id').value;
+        
+                // Prépare les données à envoyer
+                const data = {
+                    name: name,
+                    type: type,
+                    prix: prix,
+                    id  : id
+                };
+        
+                // Envoie les données au serveur Flask via fetch()
+                fetch('/update_repas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Réponse du serveur :', data); 
+                    alert('Modifie avec succes')// Affiche un message de confirmation
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                });
+            });
             </script>
         
     </body>
