@@ -18,7 +18,7 @@
             <span class="nom-resto">La Cuisine de <span class="leticia">LETICIA <i class="fas fa-utensils"></i> </span></span>
             <div class='navbar'>
                 <a href="{{url_for('index')}}"><div class="nav-elt" style="border-bottom: 2px solid orange;">Home</div></a>
-                <a href="{{url_for('menu', type='Fast Food')}}"><div class="nav-elt">Menu</div></a>
+                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt">Menu</div></a>
                 <a href="#footer"><div class="nav-elt">A propos</div></a>
             </div>
             <a href="#" class="panier-comamnde"><i class="fa-solid fa-cart-shopping"></i></a>
@@ -37,9 +37,21 @@
         </div>
 
         <div class='body'>
+
+            <div class="menu">
+                <a href="{{url_for('index')}}"><div class="nav-elt">Home</div></a>
+                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt" style="border-bottom: 2px solid white;">Menu</div></a>
+                <a href="#footer"><div class="nav-elt">A propos</div></a>
+                <a href="#"><div class="btn-login2">S'enregistrer</div></a>
+            </div>
+
             <div class="container-repas">
                 <div class="img-repas">
-                    <img src="/static/img/repas/{{repas.photo}}" alt="">
+                    <label for="photo">
+                        <i class="fa-solid fa-camera"></i>
+                    </label>
+                    <input type="file" id="photo" hidden>
+                    <img src="/static/img/repas/{{repas.photo}}" alt="" id="preview">
                 </div>
 
                 <!--<div class="info-repas">
@@ -60,6 +72,16 @@
                     <div class="ligne">
                         <div>Prix : <input id="repas-prix" class="info- info-prix" value="{{ repas.prix }}"></div>
                     </div>
+                    {% if composants != [] %}
+                    <div class="composants">
+                        <h2>composants</h2>
+                        <ul class="liste-composants">
+                            {% for comp in composants %}
+                                <li><input type="text" value="{{comp}}" class="composant info-"></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
                     <div class="btn-">
                         <button class="btn-commander">Commander</button>
                         <button id="update-button" class="btn-commander">Modifier</button>
@@ -163,13 +185,18 @@
                 const type = document.getElementById('repas-type').value;
                 const prix = document.getElementById('repas-prix').value;
                 const id   = document.getElementById('repas-id').value;
+                const composants = document.querySelectorAll('.composant');
+                const composantsValues = Array.from(composants).map(input => input.value);
+
+                console.log(composantsValues);
         
                 // Prépare les données à envoyer
                 const data = {
                     name: name,
                     type: type,
                     prix: prix,
-                    id  : id
+                    id  : id,
+                    composants: composantsValues
                 };
         
                 // Envoie les données au serveur Flask via fetch()
@@ -188,6 +215,44 @@
                 .catch(error => {
                     console.error('Erreur :', error);
                 });
+            });
+
+            document.getElementById('photo').addEventListener('change', function(event) {
+                const file = event.target.files[0]; // Récupère le fichier sélectionné
+                const id   = document.getElementById('repas-id').value;
+                console.log('id : ', id);
+        
+                if (file) {
+                    // Affiche un aperçu de l'image sélectionnée
+                    const preview = document.getElementById('preview');
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result; // Met à jour l'aperçu
+                    };
+                    reader.readAsDataURL(file);
+        
+                    // Prépare les données pour l'envoi
+                    const formData = new FormData();
+                    formData.append('photo', file);
+                    formData.append('id', id);
+        
+                    // Envoie la photo au serveur
+                    fetch('/upload_photo', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Réponse du serveur :', data);
+                        alert(data.message); // Affiche un message de confirmation
+                    })
+                    .catch(error => {
+                        console.error('Erreur :', error);
+                        alert('Une erreur est survenue lors de l\'envoi de la photo.');
+                    });
+                } else {
+                    alert('Aucune photo sélectionnée.');
+                }
             });
             </script>
         

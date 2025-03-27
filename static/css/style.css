@@ -11,7 +11,7 @@ body {
 
 .header, .navbar{
     display: flex;
-    z-index: 4;
+    z-index: 10;
 }
 
 .header{
@@ -90,13 +90,28 @@ body {
     font-size: 25px;
     color: green;
 }
+#panier-comamnde{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    padding: 2px;
+    font-size: 15px;
+    font-weight: bolder;
+    background-color: orange;
+    border-radius: 50%;
+    color: white;
+    transform: translate(19px, -9px);
+}
 
 .body{
     width: 70vw;
     margin-left: 14vw;
     background-color: transparent;
-    margin-bottom: 100px;
     margin-top: 100px;
+    margin-bottom: 100px;
 }
 
 .entete{
@@ -266,7 +281,7 @@ body {
     background-color: orange;
     font-size: 20px;
     z-index: 3;
-    margin-bottom: -100px;
+    margin-bottom: -50px;
 }
 .footer .info{
     display: flex;
@@ -437,7 +452,6 @@ body {
     flex-wrap: wrap;
     gap: 40px;
     margin-top: 40px;
-    margin-bottom: 40px;
     white-space: wrap; 
     margin-left: -60px;
 }
@@ -488,7 +502,8 @@ body {
     position: absolute;
     font-size: 20px;
     color: green;
-    transform: translate(400px, 20px);
+    z-index: 9;
+    transform: translate(400px, 15px);
 }
 
 .my{
@@ -525,10 +540,19 @@ body {
     border-radius: 50%;
     border: 2px solid green;
 }
+.fa-camera {
+    position: absolute;
+    font-size: 40px;
+    transform: translate(24vw, 24vw);
+    padding: 15px;
+    background-color: green;
+    border-radius: 50%;
+    color: white;
+}
 .info-repas{
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 30px;
     width: 40%;
     height: 30vw;
     justify-content: center;
@@ -583,6 +607,7 @@ body {
     .body{
         width: 98vw;
         margin-left: 0;
+        margin-bottom: 0;
     }
     
     .entete{
@@ -690,6 +715,7 @@ body {
     }
     .panier{
         font-size: 20px;
+        padding: 5px;
         color: green;
         transform: translate(38vw, 10px);
     }
@@ -704,7 +730,7 @@ body {
     }
     .card-repas{
         width: 45vw;
-        height: 60vw;
+        height: 62vw;
         padding: 5px;
     }
     .card-repas:hover{

@@ -18,10 +18,10 @@
             <span class="nom-resto">La Cuisine de <span class="leticia">LETICIA <i class="fas fa-utensils"></i> </span></span>
             <div class='navbar'>
                 <a href="{{url_for('index')}}"><div class="nav-elt">Home</div></a>
-                <a href="{{url_for('menu')}}"><div class="nav-elt" style="border-bottom: 2px solid orange;">Menu</div></a>
+                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt" style="border-bottom: 2px solid orange;">Menu</div></a>
                 <a href="#footer"><div class="nav-elt">A propos</div></a>
             </div>
-            <a href="#" class="panier-comamnde"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="#" class="panier-comamnde" ><div id="panier-comamnde">{{session['nb']}}</div><i class="fa-solid fa-cart-shopping"></i></a>
             <a href="#"><div class="btn-login">S'enregistrer</div></a>
 
             <div class="check">
@@ -56,7 +56,7 @@
 
             <div class="menu">
                 <a href="{{url_for('index')}}"><div class="nav-elt">Home</div></a>
-                <a href="{{url_for('menu', type='Fast Food')}}"><div class="nav-elt" style="border-bottom: 2px solid white;">Menu</div></a>
+                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt" style="border-bottom: 2px solid white;">Menu</div></a>
                 <a href="#footer"><div class="nav-elt">A propos</div></a>
                 <a href="#"><div class="btn-login2">S'enregistrer</div></a>
             </div>
@@ -70,9 +70,10 @@
 
 
             <div class="cards">
-                {% for repa in repas %}
-                <a href="{{url_for('modif', id = repa.id)}}">
+            {% for repa in repas %}
+                <!--<a href="{{url_for('modif', id = repa.id)}}">-->
                 <div class="card-repas">
+                    <input id="id-repas" type="text" value="{{repa.id}}" hidden>
                     <div class="repas-img">
                         <img src="/static/img/repas/{{repa.photo}}" alt="">
                     </div>
@@ -86,7 +87,7 @@
                     </div>
 
                 </div>
-                </a>
+                <!--</a>-->
                 
             {% endfor %}
             </div>
@@ -178,6 +179,45 @@
                             menu.style.display = 'none';
                         }, 500);
                     }
+                });
+            });
+
+            // Sélectionne toutes les divs de classe "panier"
+            const paniers = document.querySelectorAll('.panier');
+            const panier_commande = document.getElementById('panier-comamnde');
+        
+            // Ajoute un gestionnaire d'événements "click" à chaque div "panier"
+            paniers.forEach(panier => {
+                panier.addEventListener('click', function() {
+                    // Récupère la div parent de classe "card-repas"
+                    const cardRepas = panier.closest('.card-repas');
+        
+                    // Récupère l'input avec l'id "id-repas" dans cette div
+                    const idRepasInput = cardRepas.querySelector('#id-repas');
+        
+                    // Récupère la valeur de l'input
+                    const idRepas = idRepasInput.value;
+        
+                    // Affiche l'ID dans la console (ou envoyez-le au serveur)
+                    console.log('ID du repas :', idRepas);
+        
+                    // Exemple : Envoyer l'ID au serveur
+                    fetch('/add_to_cart', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ id: idRepas })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Réponse du serveur :', data);
+                        panier_commande.textContent = data['nb']; // Augmente le nombre dans le panier
+                        alert('Repas ajouté au panier !');
+                    })
+                    .catch(error => {
+                        console.error('Erreur :', error);
+                    });
                 });
             });
 

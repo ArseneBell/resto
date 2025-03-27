@@ -30,7 +30,15 @@ class Repas(Base):
     
     def Get_repas(self):
         session = self.Session()
-        result = session.query(Repas).filter(Repas.type== self.type).all()
+        result = session.query(Repas).filter(Repas.type== self.type).order_by(Repas.name).all()
+
+        if result == None:
+            return False
+        return result
+    
+    def Get_repas_all(self):
+        session = self.Session()
+        result = session.query(Repas).order_by(Repas.name).all()
 
         if result == None:
             return False
@@ -46,7 +54,7 @@ class Repas(Base):
     
     def Get_all_type(self):
         session = self.Session()
-        result = session.query(Repas.type).group_by(Repas.type).all()
+        result = session.query(Repas.type).group_by(Repas.type).order_by(Repas.type).all()
 
         if result == None:
             return False
@@ -70,7 +78,7 @@ class Repas(Base):
             if self.photo != '':
                 result.photo = self.photo
             if self.type != '':
-                result.type != self.type
+                result.type = self.type
             
             session.commit()
             return True
@@ -120,10 +128,10 @@ class Composant(Base):
         result = session.query(Composant).filter(Composant.name == self.name).first()
         return result.id
     
-    def Get_name(self):
+    def Get_name(self, id):
         session = self.Session()
-        result = session.query(Composant.name).filter(Composant.id == self.id).first()
-        return result
+        result = session.query(Composant.name).filter(Composant.id == id).first()
+        return result[0]
     
     def Search(self):
         session = self.Session()
@@ -137,7 +145,7 @@ class Composant(Base):
     
         
 class ComposantRepas(Base):
-    def __init__(self, id_repas, id_composant):
+    def __init__(self, id_repas=0, id_composant=0):
         self.id_repas = id_repas
         self.id_composant = id_composant
         self.Session = sessionmaker(bind = engine)
