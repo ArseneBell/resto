@@ -28,3 +28,5 @@ while repas != '':
                     cr.Add()
         print(composants)
     # ajouter au panier
+    
+print("3000/3500".split('/'))

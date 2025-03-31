@@ -17,11 +17,17 @@
             <div id="backButton" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i></div>
             <span class="nom-resto">La Cuisine de <span class="leticia">LETICIA <i class="fas fa-utensils"></i> </span></span>
             <div class='navbar'>
-                <a href="{{url_for('index')}}"><div class="nav-elt" style="border-bottom: 2px solid orange;">Home</div></a>
-                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt">Menu</div></a>
+                <a href="{{url_for('index')}}"><div class="nav-elt" >Home</div></a>
+                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt" style="border-bottom: 2px solid orange; color: orange">Menu</div></a>
                 <a href="#footer"><div class="nav-elt">A propos</div></a>
             </div>
-            <a href="#" class="panier-comamnde"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="{{ url_for('commande')}}"  class="panier-comamnde">
+                {% if 'nb' in session and session['nb'] > 0 %}
+                    <div id="panier-comamnde">{{session['nb']}}</div>
+                {% else %}
+                    <div id="panier-comamnde" style="background: transparent; border: none;"></div>
+                {% endif %}
+                <i class="fa-solid fa-cart-shopping"></i></a>
             <a href="#"><div class="btn-login">S'enregistrer</div></a>
 
             <div class="check">
@@ -31,16 +37,13 @@
                 <div id="bar5" class="bars"></div>
                 <div id="bar6" class="bars"></div>
             </div>
-            
-
-</label>
         </div>
 
         <div class='body'>
 
             <div class="menu">
                 <a href="{{url_for('index')}}"><div class="nav-elt">Home</div></a>
-                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt" style="border-bottom: 2px solid white;">Menu</div></a>
+                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt" style="border-bottom: 2px solid white; ">Menu</div></a>
                 <a href="#footer"><div class="nav-elt">A propos</div></a>
                 <a href="#"><div class="btn-login2">S'enregistrer</div></a>
             </div>
@@ -75,17 +78,21 @@
                     {% if composants != [] %}
                     <div class="composants">
                         <h2>composants</h2>
-                        <ul class="liste-composants">
+                        <div class="liste-composants">
                             {% for comp in composants %}
-                                <li><input type="text" value="{{comp}}" class="composant info-"></li>
+                                <div><input type="text" value="{{comp}}" class="composant info-"></div>
                             {% endfor %}
-                        </ul>
+                        </div>
                     </div>
                     {% endif %}
                     <div class="btn-">
                         <button class="btn-commander">Commander</button>
                         <button id="update-button" class="btn-commander">Modifier</button>
                     </div>
+                    {% if composants != [] %}
+                    <div class="espace2">
+                    </div>
+                    {% endif %}
                 </div>
             </div>            
         </div>

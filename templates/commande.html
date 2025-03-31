@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{{repas.name}}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}"> 
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+    <body>
+        <div class='header'>
+            <div id="backButton" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i></div>
+            <span class="nom-resto">La Cuisine de <span class="leticia">LETICIA <i class="fas fa-utensils"></i> </span></span>
+            <div class='navbar'>
+                <a href="{{url_for('index')}}"><div class="nav-elt" >Home</div></a>
+                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt" style="border-bottom: 2px solid orange; color: orange">Menu</div></a>
+                <a href="#footer"><div class="nav-elt">A propos</div></a>
+            </div>
+            <a href="#" class="panier-comamnde">
+                {% if 'nb' in session and session['nb'] > 0 %}
+                    <div id="panier-comamnde">{{session['nb']}}</div>
+                {% else %}
+                    <div id="panier-comamnde" style="background: transparent; border: none;"></div>
+                {% endif %}
+
+                <i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="#"><div class="btn-login">S'enregistrer</div></a>
+
+            <div class="check">
+                <input id="checkbox2" type="checkbox">
+                <label class="toggle toggle2" for="checkbox2">
+                <div id="bar4" class="bars"></div>
+                <div id="bar5" class="bars"></div>
+                <div id="bar6" class="bars"></div>
+            </div>
+        </div>
+
+        <div class='container-'>
+            <div class="cards-commande">
+                <h1>Commande</h1>
+                {% for r in repas %}
+                    <div class="commande-">
+                        <input type="hidden" name="id" value="{{ r.id }}" class="input-id">
+                        <img src="/static/img/repas/{{r.photo}}" alt="" class="commande-img">
+                        <div class="commande-info">
+                            <div class="commande-nom">{{ r.name }}</div>
+                            <select name="prix" id="prix-all" class="commande-prix-all">
+                                {% for prix in all_price(r.prix) %}
+                                    <option value="{{ prix }}" class="commande-prix">{{ prix }} FCFA</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="trash">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </div>
+                        
+                    </div>
+                {% endfor %}
+
+                    <div class="precision">
+                        <div class="livraison">
+                            <div class="nb">
+                                <p>Cocher si vous souhaiter etre livré.</p>
+                                <p><span>NB :</span> Des frais de livraison seront appliqués</p>
+                            </div>
+                            
+                            <label for="livraison">
+                                <input type="checkbox" name="livraison" value="oui" id="livraison"> Livraison
+                            </label>
+                        </div>
+
+                        <div class="lieu">
+                            <input type="text" placeholder="Lieu de livraison" id="lieu">
+                        </div>
+                    </div>
+
+
+                    <div class="textarea">
+                        <textarea name="description" id="description" placeholder="Precision a ajouter sur votre repas (facultatif)"></textarea>
+                    </div>
+            </div>
+            
+
+            <div class="center-">
+                <button id="btn-commande">Commander</button>
+            </div>
+               
+        </div>
+
+        <div class='footer hidden' id="footer">
+            <div class="info">
+                <div>
+                    <h2>Nos Services</h2>
+                    <ul>
+                        <li>Livraison a domicile</li>
+                        <li>Service traiteur</li>
+                        <li>Location de couvert</li>
+                        <li>Cube bouillon 100% naurel Leticube</li>
+                        <li>Gateaux d'anniversaire</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>Localisation</h2>
+                    <ul>
+                        <li>Yaounde-Cameroun</li>
+                        <li>Prison Konengui</li>
+                        <li>Face ancienne brigade</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h2>Contact</h2>
+                    <ul>
+                        <li><i class="fa fa-phone"></i> 691 005 801 - 692892 242 - 651 195 677</li>
+                        <li><i class="fas fa-envelope"></i> lacuisinedeleticia@gmail.com</li>
+                        <li><i class="fab fa-facebook"> <a href="https://www.facebook.com/share/194XwutfqS" style="color: white;"> La cuisine de LETICIA</a></i></li>
+
+            </div>
+            <div class="commentaire"></div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const elements = document.querySelectorAll('.hidden');
+            
+                function checkVisibility() {
+                    elements.forEach(element => {
+                        const rect = element.getBoundingClientRect();
+                        if (rect.top < window.innerHeight && rect.bottom > 0) {
+                            element.classList.add('visible');
+                        }
+                    });
+                }
+            
+                window.addEventListener('scroll', checkVisibility);
+                checkVisibility(); // Initial check in case elements are already in view
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const checkbox = document.getElementById('checkbox2');
+                const menu = document.querySelector('.menu');
+            
+                checkbox.addEventListener('change', function() {
+                    if (checkbox.checked) {
+                        menu.style.display = 'flex';
+                        setTimeout(() => {
+                            menu.style.transform = 'translateY(0)';
+                        }, 10);
+                    } else {
+                        menu.style.transform = 'translateY(-100%)';
+                        setTimeout(() => {
+                            menu.style.display = 'none';
+                        }, 500);
+                    }
+                });
+            });
+            function goBack() {
+                window.history.back(); // Revient à la page précédente
+            }
+
+            
+            document.addEventListener('DOMContentLoaded', () => {
+                // Sélectionner tous les éléments avec la classe fa-trash-can
+                const trashIcons = document.querySelectorAll('.fa-trash-can');
+        
+                trashIcons.forEach(icon => {
+                    icon.addEventListener('click', async (event) => {
+                        // Trouver la div parent avec la classe commande-
+                        const commandeDiv = event.target.closest('.commande-');
+                        
+                        // Récupérer la valeur de l'input-id dans cette div
+                        const inputId = commandeDiv.querySelector('.input-id').value;
+        
+                        try {
+                            // Envoyer la requête au serveur
+                            const response = await fetch('/delete-item', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ id: inputId }),
+                            });
+        
+                            if (response.ok) {
+                                // Supprimer la div commande- après une réponse réussie
+                                alert('Repas Suprime avec succes')
+                                commandeDiv.style.transform = 'scale(0)';
+                                setTimeout(() => {
+                                    commandeDiv.remove();
+                                }, 500);
+                            } else {
+                                console.error('Erreur lors de la suppression de l\'élément');
+                            }
+                        } catch (error) {
+                            console.error('Erreur réseau :', error);
+                        }
+                    });
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const btnCommande = document.getElementById('btn-commande');
+        
+                btnCommande.addEventListener('click', async () => {
+                    // Récupérer toutes les valeurs des inputs de classe input-id
+                    const inputIds = Array.from(document.querySelectorAll('.input-id')).map(input => input.value);
+        
+                    // Récupérer toutes les valeurs sélectionnées des selects de classe commande-prix-all
+                    const selectedPrices = Array.from(document.querySelectorAll('.commande-prix-all')).map(select => select.value);
+                    const description = document.getElementById('description').value;
+                    const livraison = document.getElementById('livraison').ckecked;
+                    
+                    if (livraison){
+                        var lieu = document.getElementById('lieu').value;
+                        var li = 'OUI'
+                    }else{
+                        var lieu = '';
+                        var li = 'NON'
+                    }
+        
+                    // Préparer les données à envoyer
+                    const data = inputIds.map((id, index) => ({
+                        id: id,
+                        prix: selectedPrices[index],
+                        description: description,
+                        livraison: li,
+                        lieu: lieu
+                    }));
+        
+                    console.log(data); // Debug : Afficher les données collectées
+        
+                    try {
+                        // Envoyer les données au serveur via une requête POST
+                        const response = await fetch('/submit-commande', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        });
+        
+                        if (response.ok) {
+                            const result = await response.json();
+                            console.log(result); // Debug : Afficher la réponse du serveur
+                            alert('Commande envoyée avec succès !');
+                        } else {
+                            console.error('Erreur lors de l\'envoi de la commande');
+                        }
+                    } catch (error) {
+                        console.error('Erreur réseau :', error);
+                    }
+                });
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const livraisonCheckbox = document.getElementById('livraison');
+                const lieuInput = document.getElementById('lieu');
+        
+                // Masquer l'input "lieu" par défaut
+                lieuInput.style.display = 'none';
+        
+                // Ajouter un écouteur d'événement sur la checkbox
+                livraisonCheckbox.addEventListener('change', () => {
+                    if (livraisonCheckbox.checked) {
+                        // Afficher l'input si la checkbox est cochée
+                        lieuInput.style.display = 'block';
+                    } else {
+                            lieuInput.value = ''; // Vider la valeur de l'input
+                            lieuInput.style.display = 'none';                                                
+                    }
+                });
+            });
+
+            
+            </script>
+        
+    </body>
+</html>

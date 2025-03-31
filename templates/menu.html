@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}"> 
         <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Boldonse:wght@400;700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     </head>
@@ -18,10 +19,17 @@
             <span class="nom-resto">La Cuisine de <span class="leticia">LETICIA <i class="fas fa-utensils"></i> </span></span>
             <div class='navbar'>
                 <a href="{{url_for('index')}}"><div class="nav-elt">Home</div></a>
-                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt" style="border-bottom: 2px solid orange;">Menu</div></a>
+                <a href="{{url_for('menu', type='all')}}"><div class="nav-elt" style="border-bottom: 2px solid orange; color: orange;">Menu</div></a>
                 <a href="#footer"><div class="nav-elt">A propos</div></a>
             </div>
-            <a href="#" class="panier-comamnde" ><div id="panier-comamnde">{{session['nb']}}</div><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="{{ url_for('commande')}}" class="panier-comamnde" >
+                {% if 'nb' in session and session['nb'] > 0 %}
+                    <div id="panier-comamnde">{{session['nb']}}</div>
+                {% else %}
+                    <div id="panier-comamnde" style="background: transparent; color: transparent">{{session['nb']}}</div>
+                {% endif %}
+                <i class="fa-solid fa-cart-shopping"></i>
+            </a>
             <a href="#"><div class="btn-login">S'enregistrer</div></a>
 
             <div class="check">
@@ -74,16 +82,21 @@
                 <!--<a href="{{url_for('modif', id = repa.id)}}">-->
                 <div class="card-repas">
                     <input id="id-repas" type="text" value="{{repa.id}}" hidden>
-                    <div class="repas-img">
-                        <img src="/static/img/repas/{{repa.photo}}" alt="">
-                    </div>
+                    <a href="{{url_for('modif', id = repa.id)}}">
+                        <div class="repas-img">
+                            <img src="/static/img/repas/{{repa.photo}}" alt="">
+                        </div>
+                    </a>
                     <div class="repas-info">
-                        <p class="repas-nom">{{ repa.name }}</p>
-                        {% if repa.description%}
-                            <p>{{ repa.description }}</p>
-                            {% endif %}
+                        <a href="{{url_for('modif', id = repa.id)}}">
+                            <p class="repas-nom">{{ repa.name }}</p>
+                        </a>
                         <div class="repas-prix">{{ repa.prix }} FCFA</div>
+                        {% if 'nb' in session and repa.id in session['panier'] %}
+                        <div class="panier"><i class="fa-solid fa-cart-shopping" style="color: green;"></i></div>
+                        {% else %}
                         <div class="panier"><i class="fa-solid fa-cart-shopping"></i></div>
+                        {% endif %}
                     </div>
 
                 </div>
@@ -95,6 +108,7 @@
             
         </div>
 
+        <!--
         <div class="deco deco1">
             <img class="deco-img" src="{{ url_for('static', filename='img/deco/deco2.jpg') }}" alt="">
         </div>
@@ -110,6 +124,7 @@
         <div class="deco deco5">
             <img class="deco-img" src="{{ url_for('static', filename='img/deco/deco6.jpg') }}" alt="">
         </div>
+    -->
 
         <div class="espace"></div>
         <div class="espace"></div>
@@ -212,7 +227,10 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log('Réponse du serveur :', data);
-                        panier_commande.textContent = data['nb']; // Augmente le nombre dans le panier
+                        panier_commande.textContent = data['nb'];
+                        panier_commande.style.background = 'orange';
+                        panier_commande.style.color = 'white';
+                        panier.style.color = 'green'; // Change la couleur de l'icône // Change la couleur de l'icône
                         alert('Repas ajouté au panier !');
                     })
                     .catch(error => {

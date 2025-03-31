@@ -1,10 +1,12 @@
 from flask import Flask, render_template,request, redirect, url_for, session, flash, jsonify
+from flask_mail import Mail, Message
 import secrets
 from model.repas import *
 from model.user import *
 from model.commande import *
+from model.config import Config
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 
 app = Flask('__name__')
@@ -15,8 +17,13 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
 
 
+
 UPLOAD_FOLDER = 'static/img/repas'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+app.config.from_object(Config)
+
+mail = Mail(app)
 
 
 @app.route('/')
@@ -32,6 +39,10 @@ def index():
 
 @app.route('/menu')
 def menu(tpe = 'Fast Food'):
+    
+    if 'nb' not in session:
+        session['nb'] = 0
+        session['panier'] = []
     
     all_type = Repas().Get_all_type()
     all_types = ['all']
@@ -51,6 +62,24 @@ def menu(tpe = 'Fast Food'):
         repas =  r.Get_repas_all()                    
           
     return render_template('menu.html', repas=repas, type=tpe, all_types=all_types)
+
+
+
+@app.route('/commande')
+def commande():
+    if 'nb' not in session:
+        session['nb'] = 0
+        session['panier'] = []
+        return redirect(url_for('index'))
+    
+    elif session['panier'] == [] and session['nb'] == 0:
+        return redirect(url_for('index'))
+    
+    else:
+        repas = []
+        for r in session['panier']:
+            repas.append(Repas().Get_repas_by_id(int(r)))
+        return render_template('commande.html', repas=repas, all_price = all_price)
 
 
 @app.route('/modif/<id>')
@@ -109,13 +138,73 @@ def add_to_cart():
     data = request.json  # Récupère les données JSON envoyées par le client
     repas_id = data.get('id')  # Récupère l'ID du repas
     
-    repas = Repas().Get_repas_by_id(repas_id)
+    session['panier'].append(int(repas_id))
     session['nb'] += 1  # Incrémenter le nombre de repas dans le panier
 
     # Exemple de traitement : Ajouter l'ID à une liste de panier (ou base de données)
     print(f"Repas ajouté au panier : {repas_id}")
 
     return jsonify({'message': 'Repas ajouté au panier avec succès', 'nb':session['nb'], 'status': 'success'})
+
+
+@app.route('/delete-item', methods=['POST'])
+def delete_item():
+    data = request.get_json()
+    item_id = data.get('id')
+    session['panier'].remove(int(item_id))
+    session.modified = True
+
+    # Logique pour supprimer l'élément de la base de données
+    # Exemple : db.session.query(Item).filter_by(id=item_id).delete()
+    # db.session.commit()
+
+    return jsonify({'success': True}), 200
+
+
+@app.route('/submit-commande', methods=['POST'])
+def submit_commande():
+    data = request.get_json()  # Récupérer les données JSON envoyées par le client
+
+    # Exemple de traitement des données
+    for item in data:
+        repas_id = item['id']
+        prix = item['prix']
+        livraison = item['livraison']
+        lieu = item['lieu']
+        description = item['description']
+        print(f"Repas ID: {repas_id}, Prix: {prix}")
+    if(livraison == 'OUI'):
+        print(f'livraison : {livraison},  lieu : {lieu}')
+    else: 
+        print(f'livraison : {livraison}')
+    print(description)
+    
+    now = datetime.now()
+    date_heure_actuelle = now.strftime("%A %d %B %Y, %H:%M:%S")
+    
+    msg = Message("Commande depuis le site la Cuisine de  LETICIA",
+                recipients=["kevin.bell@facsciences-uy1.cm"]                    
+    )
+    msg.body = f"Commande reçue le : {date_heure_actuelle}\n"
+    msg.html = "<p>Message from : {date_heure_actuel</p>"
+    mail.send(msg)
+    print("Email envoyé avec succès !")
+    # Retourner une réponse au client
+    return 'message envoye'
+
+@app.route('/send')
+def send():
+    msg = Message("Commande depuis le site la Cuisine de  LETICIA",
+                recipients=['bellarsene77@gmail.com']                    
+    )
+    msg.body = "Commande reçue le : 1111"
+    msg.html = "<p>Message from : {date_heure_actuel</p>"
+    mail.send(msg)
+    print("Email envoyé avec succès !")
+    # Retourner une réponse au client
+    return 'message envoye'
+
+
 
 if __name__ == '__main__':
     app.run(app, host='0.0.0.0', port=5000, debug=True)

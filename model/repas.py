@@ -181,6 +181,7 @@ class ComposantRepas(Base):
         return result
         
     
-        
+def all_price(price):
+    return price.split('/')
 
 Base.metadata.create_all(engine)
