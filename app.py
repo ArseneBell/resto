@@ -161,44 +161,63 @@ def delete_item():
     return jsonify({'success': True}), 200
 
 
-@app.route('/submit-commande', methods=['POST'])
+@app.route('/submit-commande', methods=['POST', 'GET'])
 def submit_commande():
     data = request.get_json()  # Récupérer les données JSON envoyées par le client
 
     # Exemple de traitement des données
+    
+    now = datetime.now()
+    date_heure_actuelle = now.strftime("%A %d %B %Y, %H:%M:%S")
+    msg = Message("Commande depuis le site la Cuisine de  LETICIA",
+                recipients=['bellarsene77@gmail.com']                    
+    )
+    msg.body = "Commande reçue le : 1111"
+    msg.html = "<p style='font-size: 1.2rem; font-weight: bolder;'>La Cuisine de <span style='color: orange'>LETICIA<span></p>"
+    msg.html += f"<p style='font-size: 1rem;'> Date : {date_heure_actuelle}</p><p style='font-size: 1.1rem; font-weight: bold;'>Commande</p>"
+    
+    total = 0
+    
     for item in data:
         repas_id = item['id']
         prix = item['prix']
         livraison = item['livraison']
         lieu = item['lieu']
         description = item['description']
-        print(f"Repas ID: {repas_id}, Prix: {prix}")
-    if(livraison == 'OUI'):
-        print(f'livraison : {livraison},  lieu : {lieu}')
+        name = Repas().Get_name(int(repas_id))
+        print(Repas().Get_name(1))
+        msg.html += f"<p style='font-size: 1rem;'> - <span style='color: green; font-weight: bold;'>{name}</span> : {prix} <p>"
+        
+        total += int(prix)
+    
+    print(livraison)
+        
+    if livraison == 'NON':
+        msg.html += f"<p style='font-size: 1rem;'>Lieux de livraison: {lieu}</p>"
     else: 
-        print(f'livraison : {livraison}')
-    print(description)
+        msg.html += f"<p style='font-size: 1rem;'>Pas de livraison</p>"
+    if description != "":
+        msg.html+= f"<p>{description}</p>"
+        
+    msg.html += f"<p style='font-size: 1rem; font-weight: bold;'>Prix total : {total}</p>"
     
-    now = datetime.now()
-    date_heure_actuelle = now.strftime("%A %d %B %Y, %H:%M:%S")
-    
-    msg = Message("Commande depuis le site la Cuisine de  LETICIA",
-                recipients=["kevin.bell@facsciences-uy1.cm"]                    
-    )
-    msg.body = f"Commande reçue le : {date_heure_actuelle}\n"
-    msg.html = "<p>Message from : {date_heure_actuel</p>"
     mail.send(msg)
     print("Email envoyé avec succès !")
     # Retourner une réponse au client
-    return 'message envoye'
+    return {'success': True}
 
 @app.route('/send')
 def send():
+    now = datetime.now()
+    date_heure_actuelle = now.strftime("%A %d %B %Y, %H:%M:%S")
     msg = Message("Commande depuis le site la Cuisine de  LETICIA",
                 recipients=['bellarsene77@gmail.com']                    
     )
     msg.body = "Commande reçue le : 1111"
-    msg.html = "<p>Message from : {date_heure_actuel</p>"
+    msg.html = "<p style='font-size: 1.2rem; font-weight: bolder;'>La Cuisine de <span style='color: orange'>LETICIA<span></p>"
+    msg.html += f"<p style='font-size: 1rem;> Date : {date_heure_actuelle}</p><p style='font-size: 1rem; font-weight: bolder;'>Commande</p>"
+    
+    
     mail.send(msg)
     print("Email envoyé avec succès !")
     # Retourner une réponse au client

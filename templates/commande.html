@@ -14,6 +14,26 @@
     </head>
     <body>
         <div class='header'>
+
+            <!-- Loader -->
+
+            <div id="loader">
+                <div class="dot-spinner">
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                    <div class="dot-spinner__dot"></div>
+                </div>
+                <div class="text-spinner">Veillez patienter</div>
+            </div>
+            
+
+
+
             <div id="backButton" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i></div>
             <span class="nom-resto">La Cuisine de <span class="leticia">LETICIA <i class="fas fa-utensils"></i> </span></span>
             <div class='navbar'>
@@ -203,10 +223,35 @@
                 });
             });
 
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const livraisonCheckbox = document.getElementById('livraison');
+                const lieuInput = document.getElementById('lieu');
+        
+                // Masquer l'input "lieu" par défaut
+                lieuInput.style.display = 'none';
+        
+                // Ajouter un écouteur d'événement sur la checkbox
+                livraisonCheckbox.addEventListener('change', () => {
+                    if (livraisonCheckbox.checked) {
+                        // Afficher l'input si la checkbox est cochée
+                        lieuInput.style.display = 'block';
+                    } else {
+                            lieuInput.value = ''; // Vider la valeur de l'input
+                            lieuInput.style.display = 'none';                                                
+                    }
+                });
+            });
+
+
             document.addEventListener('DOMContentLoaded', () => {
                 const btnCommande = document.getElementById('btn-commande');
+                const loader = document.getElementById('loader');
         
                 btnCommande.addEventListener('click', async () => {
+
+
+                    loader.style.display = 'flex';
                     // Récupérer toutes les valeurs des inputs de classe input-id
                     const inputIds = Array.from(document.querySelectorAll('.input-id')).map(input => input.value);
         
@@ -253,25 +298,9 @@
                         }
                     } catch (error) {
                         console.error('Erreur réseau :', error);
-                    }
-                });
-            });
-
-            document.addEventListener('DOMContentLoaded', () => {
-                const livraisonCheckbox = document.getElementById('livraison');
-                const lieuInput = document.getElementById('lieu');
-        
-                // Masquer l'input "lieu" par défaut
-                lieuInput.style.display = 'none';
-        
-                // Ajouter un écouteur d'événement sur la checkbox
-                livraisonCheckbox.addEventListener('change', () => {
-                    if (livraisonCheckbox.checked) {
-                        // Afficher l'input si la checkbox est cochée
-                        lieuInput.style.display = 'block';
-                    } else {
-                            lieuInput.value = ''; // Vider la valeur de l'input
-                            lieuInput.style.display = 'none';                                                
+                    } finally {
+                        // Masquer le loader après la réponse
+                        loader.style.display = 'none';
                     }
                 });
             });

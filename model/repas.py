@@ -65,6 +65,13 @@ class Repas(Base):
         result = session.query(Repas).filter(Repas.name == self.name).first()
         return result.id
     
+    
+    def Get_name(self, id):
+        session = self.Session()
+        result = session.query(Repas.name).filter(Repas.id == id).first()
+        return result[0]
+    
+    
     def Update(self, id):
         session = self.Session()
         result = session.query(Repas).filter(Repas.id == id).first()
